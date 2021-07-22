@@ -1,0 +1,60 @@
+public int rewards(int cost) {
+    if (cost >=50 && cost < 100) {
+        return cost-50;
+    } else if (cost >100){
+        return (2*(cost-100) + 50);
+    }
+    return 0;
+}
+
+class Transaction {
+private int cost;
+    constructor(int cost) {
+        this.cost = cost;
+        this.rewards = rewards(cost);
+        this.transactionDate = new Date();
+    }
+}
+
+class TransactionList {
+    constructor() {
+        this.list = [];
+    }
+
+    getLastThreeMonthsList() {
+        Date todaysDate = new Date();
+        const threeOldDate = todaysDate.setMonth(todaysDate.getMonth() - 3);
+        let filteredList = this.list.filter(trans => trans.transactionDate > threeOldDate);
+        return filteredList.sort((a,b) => b.transactionDate - a.transactionDate);
+    }
+
+    getAllTransactions() {
+        return this.list.sort((a,b) => b.transactionDate-a.transactionDate);
+    }
+
+    addTransaction(cost) {
+        const transaction = new Transaction(cost);
+        this.list.push(transaction);
+    }
+
+    getTotalNumberofRewards() {
+        return this.list.length ? this.list.reduce((acc,key)=>key.rewards+acc, 0) : 0;
+    }
+
+    rewardsMonthly() {
+        let lastThreeMonthsRewardsInDesc = [];
+        for(let i=0; i<3; i++) {
+            let filteredList = this.list.filter(trans => trans.transactionDate.getMonth() == (new Date).getMonth() - i );
+            lastThreeeMonthsRewardsInDesc[i] = filteredList.reduce((acc,key)=>key.rewards+acc,0);
+        }
+        return lastThreeMonthsRewardsInDesc;
+    }
+}
+
+let myTransactionList = new TransactionList();
+myTransactionList.addTransaction(100);
+myTransactionList.addTransaction(200);
+myTransactionList.addTransaction(300);
+myTransactionList.addTransaction(400);
+myTransactionList.addTransaction(500);
+let arr = myTransactionList.getAllTransactions();
